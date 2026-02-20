@@ -1,28 +1,20 @@
 // located at : src/utils/configuration.ts
-import { z } from "zod";
 import * as vscode from "vscode";
+import { z } from "zod";
 
 import { DeepKey } from "./types";
 
 const gptVersionsOpenAI = z.enum([
+  "gpt-4.1",
+  "gpt-4.1-mini",
+  "gpt-4.1-nano",
+  "gpt-4o",
+  "gpt-4o-2024-11-20",
+  "gpt-4o-2024-08-06",
   "gpt-4o-2024-05-13",
   "gpt-4o-mini",
-  "gpt-4o",
-  "gpt-4o-2024-08-06",
-  "gpt-4-0125-preview",
-  "gpt-3.5-turbo",
-  "gpt-4-turbo-preview",
-  "gpt-3.5-turbo-0125",
-  "gpt-4-1106-preview",
-  "gpt-3.5-turbo-1106",
-  "gpt-3.5-turbo-16k",
   "gpt-4o-mini-2024-07-18",
-  "gpt-3.5-turbo-instruct-0914",
-  "gpt-4-0613",
-  "gpt-3.5-turbo-instruct",
-  "gpt-4-turbo-2024-04-09",
-  "gpt-4-turbo",
-  "gpt-4"
+  "o3-mini"
 ]);
 
 const gptVersionsPerplexity = z.enum([
@@ -34,6 +26,32 @@ const gptVersionsPerplexity = z.enum([
   "llama-3-70b-instruct",
   "mixtral-8x7b-instruct"
 ]);
+
+const ollamaVersions = z.enum([
+  "codellama:7b",
+  "qwen2.5:latest",
+  "qwen2.5:7b"
+]);
+
+function isValidModelByEndpoint(version: string, endpoint: string) {
+  if (endpoint === "perplexity") {
+    return gptVersionsPerplexity.safeParse(version).success;
+  }
+
+  if (endpoint === "ollama" || endpoint === "ollama-cloud") {
+    if (ollamaVersions.safeParse(version).success) {
+      return true;
+    }
+
+    return version.trim().length > 0;
+  }
+
+  if (endpoint.startsWith("http")) {
+    return version.trim().length > 0;
+  }
+
+  return gptVersionsOpenAI.safeParse(version).success;
+}
 
 const configurationSchema = z.object({
   appearance: z.object({
@@ -56,6 +74,8 @@ const configurationSchema = z.object({
     customEndpoint: z.union([
       z.literal("openai"),
       z.literal("perplexity"),
+      z.literal("ollama"),
+      z.literal("ollama-cloud"),
       z.string().regex(/^http/)
     ])
       .default("openai")
@@ -65,15 +85,15 @@ const configurationSchema = z.object({
       .refine((version: string) => {
         const customEndpoint: string | undefined = vscode.workspace
           .getConfiguration("aicommitmessage")
-          .get("openAI.customEndpoint"); // 소문자로 변환하여 대소문자 무시
-        const validVersions = customEndpoint?.toLowerCase() === "perplexity" ?
-          gptVersionsPerplexity : gptVersionsOpenAI;
-        return validVersions.safeParse(version).success;
+          .get("openAI.customEndpoint");
+        const normalizedEndpoint = customEndpoint?.toLowerCase().trim() ?? "openai";
+
+        return isValidModelByEndpoint(version, normalizedEndpoint);
       }, {
-        message: "Invalid GPT version for the specified endpoint"
+        message: "Invalid model version for the specified endpoint"
       })
-      .default("gpt-4o")
-      .catch("gpt-4o"),
+      .default("gpt-4.1")
+      .catch("gpt-4.1"),
     temperature: z.number().optional(),
     maxTokens: z.number().optional(),
     language: z.enum([
