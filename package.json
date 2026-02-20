@@ -1,176 +1,186 @@
 {
-  "name": "ai-commit-message",
-  "displayName": "Ai Commit Message",
-  "description": "VS Code extension which helps to generate AI commit messages using ChatGPT",
-  "version": "1.1.6",
-  "homepage": "https://github.com/ComBba/AI_CommitMessage#readme",
-  "bugs": "https://github.com/ComBba/AI_CommitMessage/issues",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/ComBba/AI_CommitMessage"
-  },
-  "license": "MIT",
-  "engines": {
-    "vscode": "^1.76.0"
-  },
-  "publisher": "2weeksco",
-  "categories": [
-    "Other",
-    "SCM Providers"
-  ],
-  "keywords": [
-    "Commit",
-    "AI",
-    "ChatGPT",
-    "GPT",
-    "git",
-    "repository"
-  ],
-  "icon": "assets/images/icon256.png",
-  "activationEvents": [],
-  "main": "./out/extension.js",
-  "contributes": {
-    "commands": [
-      {
-        "command": "aicommitmessage.generateAICommit",
-        "title": "Generate AI commit",
-        "icon": {
-          "dark": "assets/icons/commit-dark.svg",
-          "light": "assets/icons/commit-light.svg"
-        }
-      },
-      {
-        "command": "aicommitmessage.setOpenAIApiKey",
-        "title": "Set OpenAI API key"
-      }
-    ],
-    "menus": {
-      "scm/title": [
-        {
-          "command": "aicommitmessage.generateAICommit",
-          "when": "scmProvider == git",
-          "group": "navigation"
-        }
-      ]
+    "name": "ai-commit-message",
+    "displayName": "Ai Commit Message",
+    "description": "VS Code extension which helps to generate AI commit messages using ChatGPT",
+    "version": "1.1.6",
+    "homepage": "https://github.com/ComBba/AI_CommitMessage#readme",
+    "bugs": "https://github.com/ComBba/AI_CommitMessage/issues",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/ComBba/AI_CommitMessage"
     },
-    "configuration": {
-      "title": "GPT Commit",
-      "properties": {
-        "aicommitmessage.appearance.delimeter": {
-          "type": "string",
-          "default": "",
-          "description": "Delimeter between commit lines"
+    "license": "MIT",
+    "engines": {
+        "vscode": "^1.76.0"
+    },
+    "publisher": "2weeksco",
+    "categories": [
+        "Other",
+        "SCM Providers"
+    ],
+    "keywords": [
+        "Commit",
+        "AI",
+        "ChatGPT",
+        "GPT",
+        "git",
+        "repository"
+    ],
+    "icon": "assets/images/icon256.png",
+    "activationEvents": [],
+    "main": "./out/extension.js",
+    "contributes": {
+        "commands": [
+            {
+                "command": "aicommitmessage.generateAICommit",
+                "title": "Generate AI commit",
+                "icon": {
+                    "dark": "assets/icons/commit-dark.svg",
+                    "light": "assets/icons/commit-light.svg"
+                }
+            },
+            {
+                "command": "aicommitmessage.setOpenAIApiKey",
+                "title": "Set OpenAI API key"
+            }
+        ],
+        "menus": {
+            "scm/title": [
+                {
+                    "command": "aicommitmessage.generateAICommit",
+                    "when": "scmProvider == git",
+                    "group": "navigation"
+                }
+            ]
         },
-        "aicommitmessage.general.generator": {
-          "type": "string",
-          "enum": [
-            "ChatGPT"
-          ],
-          "default": "ChatGPT",
-          "description": "Generator used to create commit messages"
-        },
-        "aicommitmessage.general.messageApproveMethod": {
-          "type": "string",
-          "enum": [
-            "Quick pick",
-            "Message file"
-          ],
-          "default": "Quick pick",
-          "description": "Method used to approve generated commit messages"
-        },
-        "aicommitmessage.openAI.apiKey": {
-          "type": "string",
-          "default": "",
-          "description": "Needed for generating AI commit messages"
-        },
-        "aicommitmessage.openAI.gptVersion": {
-          "type": "string",
-          "enum": [
-            "gpt-4.1",
-            "gpt-4.1-mini",
-            "gpt-4.1-nano",
-            "gpt-4o",
-            "gpt-4o-2024-11-20",
-            "gpt-4o-2024-08-06",
-            "gpt-4o-2024-05-13",
-            "gpt-4o-mini",
-            "gpt-4o-mini-2024-07-18",
-            "o3-mini",
-            "llama-3-sonar-small-32k-chat",
-            "llama-3-sonar-small-32k-online",
-            "llama-3-sonar-large-32k-chat",
-            "llama-3-sonar-large-32k-online",
-            "llama-3-8b-instruct",
-            "llama-3-70b-instruct",
-            "mixtral-8x7b-instruct",
-            "codellama:7b",
-            "qwen2.5:latest",
-            "qwen2.5:7b"
-          ],
-          "default": "gpt-4.1",
-          "description": "Model used by OpenAI, Perplexity, or Ollama (local/cloud)."
-        },
-        "aicommitmessage.openAI.customEndpoint": {
-          "type": "string",
-          "default": "openai",
-          "description": "Enter \"openai\", \"perplexity\", \"ollama\", \"ollama-cloud\", or a custom HTTP endpoint URL."
-        },
-        "aicommitmessage.openAI.temperature": {
-          "type": "number",
-          "default": 0.6,
-          "description": "Controls randomness. Lowering results in less random completions. As the temperature approaches zero, the model will become deterministic and repetitive"
-        },
-        "aicommitmessage.openAI.maxTokens": {
-          "type": "number",
-          "default": 196,
-          "description": "The maximum number of tokens to generate. Requests can use up to 2048 tokens shared between prompt and completion"
-        },
-        "aicommitmessage.openAI.language": {
-          "type": "string",
-          "enum": [
-            "English",
-            "Korean",
-            "Japanese",
-            "Chinese",
-            "Spanish",
-            "Arabic",
-            "Portuguese",
-            "Russian",
-            "French",
-            "German",
-            "Italian"
-          ],
-          "default": "English",
-          "description": "The language of the prompt. The default language is English (en)."
+        "configuration": {
+            "title": "GPT Commit",
+            "properties": {
+                "aicommitmessage.appearance.delimeter": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Delimeter between commit lines"
+                },
+                "aicommitmessage.general.generator": {
+                    "type": "string",
+                    "enum": [
+                        "ChatGPT"
+                    ],
+                    "default": "ChatGPT",
+                    "description": "Generator used to create commit messages"
+                },
+                "aicommitmessage.general.messageApproveMethod": {
+                    "type": "string",
+                    "enum": [
+                        "Quick pick",
+                        "Message file"
+                    ],
+                    "default": "Quick pick",
+                    "description": "Method used to approve generated commit messages"
+                },
+                "aicommitmessage.openAI.apiKey": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Needed for generating AI commit messages"
+                },
+                "aicommitmessage.openAI.gptVersion": {
+                    "type": "string",
+                    "enum": [
+                        "gpt-4.1",
+                        "gpt-4.1-mini",
+                        "gpt-4.1-nano",
+                        "gpt-4o",
+                        "gpt-4o-2024-11-20",
+                        "gpt-4o-2024-08-06",
+                        "gpt-4o-2024-05-13",
+                        "gpt-4o-mini",
+                        "gpt-4o-mini-2024-07-18",
+                        "o3-mini",
+                        "llama-3-sonar-small-32k-chat",
+                        "llama-3-sonar-small-32k-online",
+                        "llama-3-sonar-large-32k-chat",
+                        "llama-3-sonar-large-32k-online",
+                        "llama-3-8b-instruct",
+                        "llama-3-70b-instruct",
+                        "mixtral-8x7b-instruct",
+                        "codellama:7b",
+                        "qwen2.5:latest",
+                        "qwen2.5:7b"
+                    ],
+                    "default": "gpt-4.1",
+                    "description": "Model used by OpenAI, Perplexity, or Ollama (local/cloud)."
+                },
+                "aicommitmessage.openAI.customEndpoint": {
+                    "type": "string",
+                    "default": "openai",
+                    "description": "Enter \"openai\", \"perplexity\", \"ollama\", \"ollama-cloud\", or a custom HTTP endpoint URL."
+                },
+                "aicommitmessage.openAI.temperature": {
+                    "type": "number",
+                    "default": 0.6,
+                    "description": "Controls randomness. Lowering results in less random completions. As the temperature approaches zero, the model will become deterministic and repetitive"
+                },
+                "aicommitmessage.openAI.maxTokens": {
+                    "type": "number",
+                    "default": 196,
+                    "description": "The maximum number of tokens to generate. Requests can use up to 2048 tokens shared between prompt and completion"
+                },
+                "aicommitmessage.openAI.language": {
+                    "type": "string",
+                    "enum": [
+                        "English",
+                        "Korean",
+                        "Japanese",
+                        "Chinese",
+                        "Spanish",
+                        "Arabic",
+                        "Portuguese",
+                        "Russian",
+                        "French",
+                        "German",
+                        "Italian"
+                    ],
+                    "default": "English",
+                    "description": "The language of the prompt. The default language is English (en)."
+                }
+            }
         }
-      }
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run esbuild-base -- --minify",
+        "esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node",
+        "build": "npm run esbuild-base -- --sourcemap",
+        "watch": "npm run esbuild-base -- --sourcemap --watch",
+        "eslint:test": "eslint src --ext ts",
+        "package": "vsce package --no-yarn",
+        "lint": "npm run lint:fix",
+        "vscode-test": "vscode-test",
+        "test": "echo 'To implement test'; exit 1",
+        "prettier:test": "prettier --check --config ./.prettierrc . || echo 'Fail on prettier --check'",
+        "prettier:fix": "prettier --write --config ./.prettierrc .",
+        "git:pre-commit:fix": "npm run prettier:fix",
+        "git:pre-commit:test": "npm run prettier:test",
+        "git:pre-commit": "npm run git:pre-commit:test || echo 'To fix run \"npm git:pre-commit:fix\"'",
+        "package:publish": "vsce publish --no-yarn"
+    },
+    "devDependencies": {
+        "@types/glob": "^8.1.0",
+        "@types/node": "16.x",
+        "@types/vscode": "^1.76.0",
+        "@typescript-eslint/eslint-plugin": "^5.56.0",
+        "@typescript-eslint/parser": "^5.56.0",
+        "@vscode/test-cli": "^0.0.12",
+        "@vscode/test-electron": "^2.5.2",
+        "esbuild": "^0.17.14",
+        "eslint": "^8.36.0",
+        "glob": "^8.1.0",
+        "prettier": "^3.8.1",
+        "typescript": "^4.9.5",
+        "vscode-test": "^1.6.1"
+    },
+    "dependencies": {
+        "execa": "^9.2.0",
+        "openai": "^4.52.0",
+        "zod": "^3.23.8"
     }
-  },
-  "scripts": {
-    "vscode:prepublish": "npm run esbuild-base -- --minify",
-    "esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node",
-    "build": "npm run esbuild-base -- --sourcemap",
-    "watch": "npm run esbuild-base -- --sourcemap --watch",
-    "lint": "eslint src --ext ts",
-    "package": "vsce package --no-yarn",
-    "package:publish": "vsce publish --no-yarn"
-  },
-  "devDependencies": {
-    "@types/glob": "^8.1.0",
-    "@types/node": "16.x",
-    "@types/vscode": "^1.76.0",
-    "@typescript-eslint/eslint-plugin": "^5.56.0",
-    "@typescript-eslint/parser": "^5.56.0",
-    "@vscode/test-electron": "^2.3.0",
-    "esbuild": "^0.17.14",
-    "eslint": "^8.36.0",
-    "glob": "^8.1.0",
-    "prettier": "^3.8.1",
-    "typescript": "^4.9.5"
-  },
-  "dependencies": {
-    "execa": "^9.2.0",
-    "openai": "^4.52.0",
-    "zod": "^3.23.8"
-  }
 }

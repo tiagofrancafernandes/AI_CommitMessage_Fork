@@ -6,3 +6,14 @@ node_modules
 *.vsix
 
 .DS_Store
+*no*commit*
+*No*Commit*
+*NO*COMMIT*
+*.bak
+*.bkp.*
+*.bkp
+*.log
+*.swp
+*.out
+*.zip
+_ide_helper*
