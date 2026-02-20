@@ -19,7 +19,7 @@ Welcome to the **AI Commit Message** extension for VS Code - your ultimate compa
 
 ## 📋 Requirements
 
-To unleash the full potential of AI Commit Message, you'll need an OpenAI API Key. Get yours from [OpenAI](https://platform.openai.com/account/api-keys) and let the magic begin! 🔑✨
+To unleash the full potential of AI Commit Message, configure one provider credential: OpenAI, Perplexity, Ollama local, or Ollama cloud. For local Ollama, no external key is required (the extension uses the local endpoint). 🔑✨
 
 ## 🎨 Extension Settings
 
@@ -34,12 +34,23 @@ AI Commit Message offers a range of settings to customize your experience:
 - `aicommitmessage.general.generator`: Generator used to create commit messages. Available options: ChatGPT.
 - `aicommitmessage.general.messageApproveMethod`: Method used to approve generated commit messages. Available options: Quick pick, Message file.
 
-- `aicommitmessage.openAI.apiKey`: OpenAI API Key. Needed for generating AI commit messages
-- `aicommitmessage.openAI.gptVersion`: Version of GPT used by OpenAI
-- `aicommitmessage.openAI.customEndpoint`: Enter "openai" or "perplexity" or enter a custom endpoint URL.
+- `aicommitmessage.openAI.apiKey`: API key for the selected provider. For local Ollama this can stay as the default local value.
+- `aicommitmessage.openAI.gptVersion`: Model name used by OpenAI, Perplexity, or Ollama.
+- `aicommitmessage.openAI.customEndpoint`: Enter "openai", "perplexity", "ollama", "ollama-cloud", or a custom endpoint URL.
 - `aicommitmessage.openAI.temperature`: Controls randomness. Lowering results in less random completions. As the temperature approaches zero, the model will become deterministic and repetitive
 - `aicommitmessage.openAI.maxTokens`: The maximum number of tokens to generate. Requests can use up to 2048 tokens shared between prompt and completion
 - `aicommitmessage.openAI.language`: The language of the prompt. The default language is English (en).
+
+
+### Ollama Model Suggestions
+
+When using Ollama, the extension offers the following ready-to-use model list:
+
+- `codellama:7b`
+- `qwen2.5:latest`
+- `qwen2.5:7b`
+
+You can also choose **Manual model** in the setup command to type another model name.
 
 ## 📝 Release Notes
 

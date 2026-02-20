@@ -4,6 +4,7 @@ import { logToOutputChannel } from "./output";
 
 export function trimNewLines(str: string, delimeter?: string) {
   const stringParts = str.split("\n");
+
   if (stringParts.length === 0) {
     return str;
   }
@@ -12,7 +13,7 @@ export function trimNewLines(str: string, delimeter?: string) {
 
   if (delimeter) {
     console.log("delimeter", delimeter);
-    formattedStrings = formattedStrings.map((str) => `${delimeter} ${str}`);
+    formattedStrings = formattedStrings.map((strPart) => `${delimeter} ${strPart}`);
   }
 
   return formattedStrings.join("\n");
@@ -21,21 +22,28 @@ export function trimNewLines(str: string, delimeter?: string) {
 export function isValidApiKey() {
   const configuration = getConfiguration();
   const apiKey = configuration.openAI.apiKey ?? "";
-  const customEndpoint = configuration.openAI.customEndpoint?.toLowerCase();
+  const customEndpoint = configuration.openAI.customEndpoint?.toLowerCase().trim() ?? "openai";
 
-  if (apiKey === null || apiKey === undefined || apiKey.trim().length === 0) {
+  if (customEndpoint === "ollama") {
+    return true;
+  }
+
+  if (apiKey.trim().length === 0) {
     logToOutputChannel("Invalid API key", apiKey);
     return false;
   }
 
-  const isValidPrefix = customEndpoint === "perplexity" ?
-    apiKey.startsWith("pplx-") : apiKey.startsWith("sk-");
-
-  if (!isValidPrefix) {
-    logToOutputChannel("Invalid API key prefix", apiKey);
-    logToOutputChannel("Expected prefix", customEndpoint);
-    return false;
+  if (customEndpoint === "perplexity") {
+    return apiKey.startsWith("pplx-");
   }
 
-  return true;
+  if (customEndpoint === "ollama-cloud") {
+    return apiKey.startsWith("ollama_");
+  }
+
+  if (customEndpoint.startsWith("http")) {
+    return true;
+  }
+
+  return apiKey.startsWith("sk-");
 }
